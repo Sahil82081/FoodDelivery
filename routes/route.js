@@ -22,7 +22,7 @@ router.post('/api/hotel/removedish/:id', hotelauth, Controllers.removedish)
 router.post('/api/hotel/editdish/:id', hotelauth, Controllers.editdish)
 router.post('/api/address', hotelauth, Controllers.addresssaved)
 router.get('/api/useraddress', hotelauth, Controllers.useraddress)
-router.post('/api/orderplace', hotelauth, Controllers.placeorder)
+router.post('/api/orderplaced', hotelauth, Controllers.placeorder)
 router.post('/api/orderdata', hotelauth, Controllers.ordersummary)
 
 
