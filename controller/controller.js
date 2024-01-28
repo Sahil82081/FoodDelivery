@@ -16,7 +16,6 @@ const resgistration = async (req, res) => {
             })
         }
         saveduser = await db.userdata(user).save()
-        console.log("User Saved Successfully")
         const token = jwt.sign({ id: saveduser._id }, process.env.SECRET_KEY)
         res.json({
             message: "Succesfully Register",
@@ -61,7 +60,6 @@ const shopregistration = async (req, res) => {
     try {
         let hotel = req.body
         hoteldata = await db.hoteldata(hotel).save()
-        console.log("Hotel Data Submited")
         res.json({
             message: "Succesfully Submitted",
         })
@@ -78,7 +76,6 @@ const shoplogin = async (req, res) => {
 
     const hotel = req.body
     const hotelexist = await db.hoteldata.findOne({ email: hotel.email })
-    console.log(hotelexist)
 
     if (hotelexist.email == hotel.email && hotelexist.password == hotel.password) {
 
@@ -131,7 +128,6 @@ const getOrders = async (req, res) => {
     try {
         const user = req.user
         const userdata = await db.userdata.findOne({ _id: user.id }).populate("ordered")
-        console.log(userdata)
         res.status(200).json({
             orderd: userdata.ordered
         })
@@ -147,7 +143,7 @@ const getuserdata = async (req, res) => {
     try {
         const user = req.user
         const userdata = await db.userdata.findById({ _id: user.id })
-        console.log(userdata)
+      
         res.status(201).json({
             userdata
         })
@@ -177,7 +173,7 @@ const hoteldishadd = async (req, res) => {
                 dishes: req.body
             }
         })
-        console.log("Firse ADD Hogaya")
+     
         res.status(200).json({
             message: "Succesfully added"
         })
@@ -194,7 +190,7 @@ const removedish = async (req, res) => {
         const hotel = req.user
         const id = req.params.id
         await db.hoteldata.updateOne({ _id: hotel.id }, { $pull: { dishes: { _id: id } } })
-        console.log("successfully")
+   
     } catch (err) {
         console.log(err)
     }
@@ -210,7 +206,6 @@ const editdish = async (req, res) => {
             item._id == id ? dish : item
         )
         await db.hoteldata.findOneAndUpdate({ _id: hotel.id }, { dishes: dishes })
-        console.log("Successfull Updated")
 
         res.status(200).json({
             message: "Successfully Submitted"
@@ -238,10 +233,6 @@ const orderstatus = async (req, res) => {
         const orderid = req.body.orderid
         const Status = req.body.status
         await db.ordereddata.findByIdAndUpdate({ _id: orderid }, { Status })
-        const updatedOrder = await db.userdata.findOneAndUpdate(
-            { 'ordered': { _id: orderid } },
-            { $set: { 'ordered.$.Status': 'confirm' } }
-        );
         res.status(200).json({
             message: `Order ${Status}`
         })
@@ -312,7 +303,6 @@ const ordersummary = async (req, res) => {
         const userdata = await db.userdata.findOne({ _id: user.id, "address._id": addressid }, { "address.$": 1 })
         const specificaddress = userdata.address[0]
         res.status(201).json({
-            message: "Address Recived",
             hotel,
             specificaddress
         })
@@ -331,13 +321,11 @@ const orderplaced = async (req, res) => {
         const user = req.user
         const orderedinfo = req.body
         const order = await db.ordereddata(orderedinfo).save()
-        console.log(order)
         await db.userdata.findByIdAndUpdate({ _id: user.id }, {
             $push: {
                 ordered: order._id
             }
         })
-        console.log("Order Placed")
         res.status(201).json({
             message: "Order Placed"
         })
