@@ -5,7 +5,7 @@ const PORT = 8000
 
 const router = require('../routes/route')
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'https://foodway-three.vercel.app/',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
   };
